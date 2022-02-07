@@ -56,6 +56,7 @@ class sfCommandOption
 
     if (null !== $shortcut)
     {
+      $shortcut = (string)$shortcut;
       if ('-' == $shortcut[0])
       {
         $shortcut = substr($shortcut, 1);
