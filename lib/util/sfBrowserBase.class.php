@@ -272,7 +272,7 @@ abstract class sfBrowserBase
 
     // request parameters
     $_GET = $_POST = array();
-    if (in_array(strtoupper($method), array('POST', 'DELETE', 'PUT')))
+    if (in_array(strtoupper($method), array('POST', 'DELETE', 'PUT', 'PATCH')))
     {
       if (isset($parameters['_with_csrf']) && $parameters['_with_csrf'])
       {
@@ -363,7 +363,10 @@ abstract class sfBrowserBase
       }
       else
       {
-        @$this->dom->loadHTML($response->getContent());
+        if ($content = $response->getContent())
+        {
+          @$this->dom->loadHTML($content);
+        }
       }
       $this->domCssSelector = new sfDomCssSelector($this->dom);
     }
@@ -908,7 +911,7 @@ abstract class sfBrowserBase
     }
     else
     {
-      $queryString = http_build_query($arguments, null, '&');
+      $queryString = is_array($arguments) ? http_build_query($arguments, '', '&') : '';
       $sep = false === strpos($url, '?') ? '?' : '&';
 
       return array($url.($queryString ? $sep.$queryString : ''), 'get', array());
